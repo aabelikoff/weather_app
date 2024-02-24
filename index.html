@@ -12,6 +12,8 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="style.css" />
+    <script src="./scripts/errors.js" defer></script>
+    <script src="./scripts/date.js" defer></script>
     <script src="./scripts/domUpdate.js" defer></script>
     <script src="./scripts/request.js" defer></script>
     <script src="./scripts/main.js" defer></script>
@@ -19,7 +21,7 @@
   <body>
     <div class="container">
       <header class="header flex between">
-        <div class="logo"><h1>Current weather</h1></div>
+        <div class="logo"><h1>Weather App</h1></div>
         <div class="search-block">
           <input type="text" name="city-search" id="city-search" />
           <button id="search"><i class="fa-solid fa-magnifying-glass"></i></button>
@@ -27,21 +29,24 @@
       </header>
       <div class="info-container flex column" id="current">
         <div class="title-block flex between w-100">
-          <h2 id="city" data-info-type="city"></h2>
-          <h2 id="date" data-info-type="currentDate"></h2>
+          <h2 id="city">Current weather</h2>
+          <h2 id="date" data-info-type="current_date"></h2>
         </div>
         <div class="weather-block flex between w-100">
           <div class="weather-description">
-            <p id="current-description" data-info-type="main"></p>
             <div class="current-picture">
               <img alt="" src="" data-info-type="icon" />
+              <p id="current-description" data-info-type="main"></p>
             </div>
           </div>
-          <p id="current-temp"><span data-info-type="temp"></span>&deg;C</p>
-          <div class="add-info flex column">
-            <p id="min-temp">Max temperature: <span data-info-type="temp_max"> </span>&deg;C</p>
-            <p id="max-temp">Min temperature: <span data-info-type="temp_min"> </span>&deg;C</p>
-            <p id="cur-wind">Wind speed (km/h): <span data-info-type="speed"> </span></p>
+          <div>
+            <p id="current-temp"><span data-info-type="temp"></span>&deg;C</p>
+            <p>Real feel <span data-info-type="feels_like"></span>&deg;</p>
+          </div>
+          <div class="add-info flex column between">
+            <p id="min-temp">Sunrise: <span data-info-type="sunrise"></span></p>
+            <p id="max-temp">Sunset: <span data-info-type="sunset"> </span></p>
+            <p id="cur-wind">Duration: <span data-info-type="duration"> </span></p>
           </div>
         </div>
       </div>

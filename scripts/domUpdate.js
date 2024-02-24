@@ -1,11 +1,14 @@
 function showCurrentWeather(weatherObj) {
+  console.log(Object.entries(weatherObj));
   for (let key in weatherObj) {
     const domElem = document.querySelector(`[data-info-type=${key}]`);
-    if (domElem.tagName == "IMG") {
-      domElem.setAttribute("src", weatherObj[key]);
-      continue;
+    if (domElem) {
+      if (domElem.tagName == "IMG") {
+        domElem.setAttribute("src", weatherObj[key]);
+        continue;
+      }
+      domElem.innerHTML = isNaN(weatherObj[key]) ? weatherObj[key] : weatherObj[key].toFixed(0);
     }
-    domElem.innerHTML = isNaN(weatherObj[key]) ? weatherObj[key] : weatherObj[key].toFixed(0);
   }
 }
 

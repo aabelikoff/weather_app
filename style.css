@@ -63,7 +63,10 @@ header {
 .info-container:last-of-type {
   margin-top: 16px;
 }
-
+.current-picture,
+#current-description {
+  text-align: center;
+}
 .weather-description,
 #current-temp,
 .add-info {
