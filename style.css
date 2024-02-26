@@ -30,15 +30,22 @@ input {
 .w-100 {
   width: 100%;
 }
+.b-bottom {
+  border-bottom: solid;
+  border-color: rgb(235, 235, 235);
+  border-width: 2px;
+}
 
 .container {
-  padding: 0 16px 16px;
+  padding: 0 0 16px;
   max-width: 700px;
   margin: 16px auto;
   background-color: beige;
 }
+/* ---- Header ---- */
 header {
   padding: 16px 0;
+  margin: 0 16px;
 }
 #city-search {
   background-color: beige;
@@ -54,14 +61,45 @@ header {
   cursor: pointer;
   color: gray;
 }
+/* ---- Navigation ---- */
+
+.menu {
+  list-style: none;
+  padding: 0 16px;
+  background-color: #333333;
+  color: #cccccc;
+  /* gap: 8px; */
+}
+
+.menu li {
+  padding: 8px;
+  cursor: pointer;
+  border-left: 1px solid #cccccc;
+  transition: background-color 0.3s, color 0.3s;
+  font-weight: 600;
+}
+.menu li:last-child {
+  border-right: 1px solid #cccccc;
+}
+.menu li:hover {
+  background-color: #555555;
+  color: #ffffff;
+}
 .info-container {
   background-color: white;
   padding: 16px;
   gap: 16px;
 }
 
-.info-container:last-of-type {
-  margin-top: 16px;
+.active {
+  background-color: teal;
+  color: beige;/
+}
+.info-container {
+  margin: 16px;
+}
+.info-container:last-child {
+  margin-bottom: 0;
 }
 .current-picture,
 #current-description {
@@ -107,6 +145,10 @@ header {
   flex-direction: column;
   gap: 6px;
 }
+.forecast-title > p,
+.forecast-item > p {
+  padding: 5px 0;
+}
 .pic {
   min-height: 100px;
 }
@@ -114,6 +156,38 @@ header {
   width: 100%;
   object-fit: contain;
 }
+
+/* ---- Nearby places block --- */
+.nearby-block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.nearby-item {
+  padding: 8px;
+  background-color: beige;
+  cursor: pointer;
+}
+.nearby-item > p {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.nearby-item img {
+  max-width: 40%;
+}
+.nearby-item p:first-child {
+  /* flex: 1 1 40%; */
+  justify-content: flex-start;
+  width: 40%;
+}
+.nearby-item p:last-child() {
+  width: 60%;
+}
+
 .error-container {
   position: absolute;
   top: 0;

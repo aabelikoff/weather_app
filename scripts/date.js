@@ -27,3 +27,9 @@ function getTimeDifferenceStr(start, end) {
   let hours = Math.floor(diff / 3600);
   return `${hours}:${formatWithLeadZero(mins)} hr`;
 }
+
+function getWeekDayName(num) {
+  if (num >= 0 && num < 7) {
+    return ["Sunday", "Monday", "Tuesday", "Wednsday", "Thursday", "Friday", "Saturday"][num];
+  }
+}

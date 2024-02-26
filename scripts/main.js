@@ -3,8 +3,14 @@ const citySearchIput = document.querySelector("#city-search");
 const HOME_CITY = "Dublin";
 
 window.addEventListener("load", async function () {
-  let searcObj = await getGeolocation();
-  getCommonInfo(searcObj);
+  let searchObj = await getGeolocation();
+  let weatherObj = await getCommonInfo(searchObj);
+  let weatherArray = await getForecastInfo(weatherObj);
+  let nearbyPlaces = await getClosestPlaces(weatherObj);
+  console.log(nearbyPlaces);
+  showCurrentWeather(weatherObj);
+  showForecast(weatherArray, document.querySelector(".forecast-block"));
+  showNearbyPlacesWeather(nearbyPlaces, document.querySelector(".nearby-block"));
 });
 
 searchBlock.addEventListener("change", (e) => {

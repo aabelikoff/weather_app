@@ -23,10 +23,16 @@
       <header class="header flex between">
         <div class="logo"><h1>Weather App</h1></div>
         <div class="search-block">
-          <input type="text" name="city-search" id="city-search" />
+          <input type="text" name="city-search" id="city-search" data-info-type="city" />
           <button id="search"><i class="fa-solid fa-magnifying-glass"></i></button>
         </div>
       </header>
+      <nav>
+        <ul class="menu flex">
+          <li data-action="today" class="active">Today</li>
+          <li data-action="forecast">5-day-forecast</li>
+        </ul>
+      </nav>
       <div class="info-container flex column" id="current">
         <div class="title-block flex between w-100">
           <h2 id="city">Current weather</h2>
@@ -55,6 +61,15 @@
           <h2>Hourly</h2>
         </div>
         <div class="forecast-block"></div>
+      </div>
+      <div class="info-container flex column" id="nearby-places">
+        <div class="title-block flex between w-100">
+          <h2>Nearby places</h2>
+        </div>
+        <div class="nearby-block"></div>
+      </div>
+      <div class="info-container flex column" id="5-days">
+        <div class="5-days-block"></div>
       </div>
     </div>
   </body>

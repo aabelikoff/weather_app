@@ -2,7 +2,7 @@ const apiInfo = {
   apiKey: "05d2088a279e772e80c3bbb83d947886",
   getCurrentUrl(searchObj) {
     if (searchObj.city) {
-      return `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${this.apiKey}`;
+      return `https://api.openweathermap.org/data/2.5/weather?q=${searchObj.city}&units=metric&appid=${this.apiKey}`;
     } else {
       return `https://api.openweathermap.org/data/2.5/weather?lat=${searchObj.lat}&lon=${searchObj.lon}&units=metric&appid=${this.apiKey}`;
     }
@@ -10,52 +10,58 @@ const apiInfo = {
   getForecastUrl(lat, lon) {
     return `https://api.openweathermap.org/data/2.5/forecast/?lat=${lat}&lon=${lon}&units=metric&appid=${this.apiKey}`;
   },
+  getGeocodingUrl(searchObj) {
+    if (searchObj.lat && searchObj.lon) {
+      return `http://api.openweathermap.org/data/2.5/find?lat=${searchObj.lat}&lon=${searchObj.lon}&cnt=5&appid=${this.apiKey}`;
+    } else {
+      return `http://api.openweathermap.org/data/2.5/find?q=${searchObj.city}&cnt=5&appid=${this.apiKey}`;
+    }
+  },
 };
 //weather api request for weather info obj
 async function getCommonInfo(searchParams) {
-  try {
-    hideError(window.current);
-    let url = apiInfo.getCurrentUrl(searchParams);
-    console.log(url);
-    let response = await fetch(url);
-    if (!response.ok) {
-      throw new HttpError("Http request error", response);
-    }
-    let result = await response.json();
-    console.log(result);
-    let {
-      name: city,
-      coord: { lat, lon },
-      main: { temp, temp_max, temp_min, feels_like },
-      wind: { speed },
-      dt,
-      weather: [{ main, icon }],
-      sys: { sunrise, sunset },
-    } = result;
-    console.log(icon, main);
-    showCurrentWeather({
-      city,
-      current_date: getDateStr(dt),
-      sunrise: getTimeStr(sunrise),
-      sunset: getTimeStr(sunset),
-      duration: getTimeDifferenceStr(sunrise, sunset),
-      temp,
-      temp_max,
-      temp_min,
-      feels_like,
-      speed,
-      main,
-      icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
-    });
-    //getting forecast
-    response = await fetch(apiInfo.getForecastUrl(lat, lon));
-    let { list: forecast } = await response.json();
-    console.log(forecast);
-    const forecastBlockElem = document.querySelector(".forecast-block");
-    showForecast(forecast.slice(0, 6), forecastBlockElem);
-  } catch (error) {
-    // showError(error.response, window.current);
+  let url = apiInfo.getCurrentUrl(searchParams);
+  //testing
+  let response = await fetch(url);
+  if (!response.ok) {
+    throw new HttpError("Http request error", response);
   }
+  let result = await response.json();
+  let {
+    name: city,
+    coord: { lat, lon },
+    main: { temp, temp_max, temp_min, feels_like },
+    wind: { speed },
+    dt,
+    weather: [{ main, icon }],
+    sys: { sunrise, sunset },
+  } = result;
+  return {
+    lat,
+    lon,
+    city,
+    current_date: getDateStr(dt),
+    sunrise: getTimeStr(sunrise),
+    sunset: getTimeStr(sunset),
+    duration: getTimeDifferenceStr(sunrise, sunset),
+    temp,
+    temp_max,
+    temp_min,
+    feels_like,
+    speed,
+    main,
+    icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
+  };
+}
+
+async function getForecastInfo({ lat, lon }) {
+  response = await fetch(apiInfo.getForecastUrl(lat, lon));
+  if (!response.ok) {
+    throw new HttpError("Http request error", response);
+  }
+  let { list: forecast } = await response.json();
+  console.log(forecast);
+  return forecast;
 }
 
 async function getGeolocation() {
@@ -105,4 +111,27 @@ async function getCoordsFromIp() {
       throw error;
     }
   }
+}
+
+async function getClosestPlaces(searchParams) {
+  const url = apiInfo.getGeocodingUrl(searchParams);
+  console.log(url);
+  let response = await fetch(url);
+  if (!response.ok) {
+    throw new HttpError("Http request error", response);
+  }
+  let result = await response.json();
+  if (result.list.length <= 1) {
+    let {
+      list: [
+        {
+          coord: { lat, lon },
+        },
+      ],
+    } = result;
+    if (lat && lon) {
+      getClosestPlaces({ lon: lon, lat: lat });
+    }
+  }
+  return result.list.slice(1);
 }
