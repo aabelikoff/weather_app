@@ -40,7 +40,7 @@ input {
   padding: 0 0 16px;
   max-width: 700px;
   margin: 16px auto;
-  background-color: beige;
+  background-color: #d0d074;
 }
 /* ---- Header ---- */
 header {
@@ -48,7 +48,7 @@ header {
   margin: 0 16px;
 }
 #city-search {
-  background-color: beige;
+  background-color: #d0d074;
   border: none;
   outline: none;
   border-bottom: 2px solid teal;
@@ -93,7 +93,7 @@ header {
 
 .active {
   background-color: teal;
-  color: beige;/
+  color: #d0d074;/
 }
 .info-container {
   margin: 16px;
@@ -168,7 +168,7 @@ header {
 }
 .nearby-item {
   padding: 8px;
-  background-color: beige;
+  background-color: #d0d074;
   cursor: pointer;
 }
 .nearby-item > p {
@@ -186,6 +186,40 @@ header {
 }
 .nearby-item p:last-child() {
   width: 60%;
+}
+/* --- Five days --- */
+.five-days-block{
+  align-items: stretch;
+  background-color: #f7f7f7;
+}
+#five-days{
+  padding: 0;
+}
+.active-day{
+  background-color: rgb(255,253,253);
+
+}
+.day-item{
+  cursor: pointer;
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  /* justify-content: space-between; */
+  padding: 10px;
+  gap: 6px;
+  border-right: 4px solid #d0d074;
+
+}
+.five-days-block .day-item:last-of-type{
+  border-right: none;
+  padding-right: 16px;
+}
+.five-days-block .day-item:first-of-type{
+  padding-left: 16px;
+}
+.day-item p:last-of-type{
+  font-size: 0.9em;
 }
 
 .error-container {

@@ -12,8 +12,9 @@
       referrerpolicy="no-referrer"
     />
     <link rel="stylesheet" href="style.css" />
-    <script src="./scripts/errors.js" defer></script>
     <script src="./scripts/date.js" defer></script>
+    <script src="./scripts/errors.js" defer></script>
+    <script src="./scripts/DataManipulator.js" defer></script>
     <script src="./scripts/domUpdate.js" defer></script>
     <script src="./scripts/request.js" defer></script>
     <script src="./scripts/main.js" defer></script>
@@ -68,8 +69,14 @@
         </div>
         <div class="nearby-block"></div>
       </div>
-      <div class="info-container flex column" id="5-days">
-        <div class="5-days-block"></div>
+      <div class="info-container" id="five-days">
+        <div class="five-days-block flex"></div>
+      </div>
+      <div class="info-container flex column" id="forecast-five-days">
+        <div class="title-block flex between w-100">
+          <h2>Hourly</h2>
+        </div>
+        <div class="forecast-block five-days"></div>
       </div>
     </div>
   </body>

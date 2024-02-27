@@ -9,8 +9,10 @@ window.addEventListener("load", async function () {
   let nearbyPlaces = await getClosestPlaces(weatherObj);
   console.log(nearbyPlaces);
   showCurrentWeather(weatherObj);
-  showForecast(weatherArray, document.querySelector(".forecast-block"));
+  showForecast(weatherArray, document.querySelector(".forecast-block"), 0);
   showNearbyPlacesWeather(nearbyPlaces, document.querySelector(".nearby-block"));
+  show5DaysForecast(weatherArray, document.querySelector(".five-days-block"));
+  showForecast(weatherArray, document.querySelector(".five-days"), 0);
 });
 
 searchBlock.addEventListener("change", (e) => {

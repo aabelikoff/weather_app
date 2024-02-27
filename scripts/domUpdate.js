@@ -23,15 +23,28 @@ function degreesToWindDirection(degrees) {
   return directions[index];
 }
 
-function showForecast(weatherArray, containerElem) {
+function sliceWeatherArray(weatherArray, dt, maxCount) {
+  let curDate = new Date();
+  let dateToShow = new Date(dt * 1000);
+  dateToShow.setHours(curDate.getHours());
+  let timeToFind = Math.floor(dateToShow.getTime() / 1000);
+  let startIndex = weatherArray.findIndex(({ dt }) => {
+    return dt > timeToFind;
+  });
+  return weatherArray.slice(startIndex, startIndex + maxCount);
+}
+
+function showForecast(weatherArray, containerElem, dt) {
   if (weatherArray.length) {
-    weatherArray = weatherArray.slice(0, 6);
+    weatherArray = sliceWeatherArray(weatherArray, dt, 6);
     let [{ dt: curDayStamp }] = weatherArray;
-    let dayWeeekName = getWeekDayName(new Date().getDay());
+    let dayWeeekName = getWeekDayName(new Date(curDayStamp * 1000).getDay());
+    let curDayWeekName = getWeekDayName(new Date().getDay());
+    let dateStr = dayWeeekName == curDayWeekName ? getDayPart(new Date()) : dayWeeekName.toUpperCase();
     containerElem.innerHTML = "";
     containerElem.innerHTML = `
     <div class="forecast-title">
-      <p id="dayWeek">Today</p>
+      <p id="dayWeek">${dateStr}</p>
       <div class="pic"></div>
       <p class="b-bottom">Forecast</p>
       <p class="b-bottom">Temp(&deg;C)</p>
@@ -47,7 +60,7 @@ function showForecast(weatherArray, containerElem) {
         containerElem.innerHTML += `
       <div class="forecast-item">
         <p class="time">
-          ${dt_txt.match(/\d{2}:\d{2}(?=:\d{2})/g)[0]}
+          ${getTimeStr(dt).replace(/:\d+(?=\s)/, "")}
         </p>
         <div class="pic">
           <img src='https://openweathermap.org/img/wn/${icon}@2x.png' alt='weather-icon'/>
@@ -88,7 +101,33 @@ function showNearbyPlacesWeather(nearbyPlaces, containerElem) {
   });
 }
 
-function show5DaysForecast(weatherArray) {}
+function show5DaysForecast(weatherArray, containerElem) {
+  const forecastObj = new DataManipulator(weatherArray);
+  const allDaysWeatherArray = forecastObj.getAllDaysWeatherArray();
+  const conatainerElem = document.querySelector(".five-days");
+  allDaysWeatherArray.forEach((weatherObj, index) => {
+    const dayItem = document.createElement("div");
+    dayItem.classList.add("day-item");
+    dayItem.dataset.dt = weatherObj.dt;
+    let headerText = index ? geShorttWeekDay(weatherObj.dt) : getDayPart(new Date());
+    dayItem.innerHTML = `
+    <h2>${headerText}</h2>
+    <p>${getShortDateStr(weatherObj.dt)}</p>
+    <img src='https://openweathermap.org/img/wn/${weatherObj.icon}@2x.png' alt='weather-icon'/>
+    <p>Max: ${weatherObj.maxTemp}&deg;</p>
+    <p>Min: ${weatherObj.minTemp}&deg;</p>
+    <p>${weatherObj.main}, ${weatherObj.tempDescr}</p>`;
+    containerElem.append(dayItem);
+
+    dayItem.addEventListener("click", function (e) {
+      e.stopPropagation();
+      const dt = this.dataset.dt;
+      showForecast(weatherArray, conatainerElem, dt);
+    });
+  });
+}
+
+function fiveDaysForecastHandler() {}
 
 function showError(requestObj, containerElem) {
   const forecastElem = document.querySelector("#forecast");
@@ -111,3 +150,5 @@ function hideError(containerElem) {
   const forecastElem = document.querySelector("#forecast");
   forecastElem.removeAttribute("style");
 }
+
+// ${dt_txt.match(/\d{2}:\d{2}(?=:\d{2})/g)[0]}
