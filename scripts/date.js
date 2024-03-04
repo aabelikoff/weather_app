@@ -62,15 +62,10 @@ function getShortDateStr(time) {
 function getDayPart(dateObj) {
   const hour = dateObj.getHours();
   if (hour >= 4 && hour < 12) {
-    return "THIS MORNING";
+    return "TODAY";
   } else if (hour >= 12 && hour < 18) {
     return "TODAY";
   } else {
     return "TONIGHT";
   }
 }
-
-let time = Date.now() / 1000;
-
-console.log(geShorttWeekDay(time));
-console.log(getShortDateStr(time));

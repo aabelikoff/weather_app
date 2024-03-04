@@ -15,6 +15,9 @@ h2,
 input {
   color: teal;
 }
+i{
+  pointer-events: none;
+}
 /* ---- Utility classes --- */
 .flex {
   display: flex;
@@ -41,6 +44,9 @@ input {
   max-width: 700px;
   margin: 16px auto;
   background-color: #d0d074;
+}
+.hide {
+  display: none;
 }
 /* ---- Header ---- */
 header {
@@ -125,6 +131,7 @@ header {
   width: 100%;
   margin-left: 10px;
 }
+/* --- Forecast block --- */
 
 .forecast-block {
   display: grid;
@@ -155,6 +162,9 @@ header {
 .pic img {
   width: 100%;
   object-fit: contain;
+}
+.time {
+  min-height: 50px;
 }
 
 /* ---- Nearby places block --- */
@@ -211,6 +221,10 @@ header {
   border-right: 4px solid #d0d074;
 
 }
+
+.day-item-title {
+  min-height: 60px;
+}
 .five-days-block .day-item:last-of-type{
   border-right: none;
   padding-right: 16px;
@@ -222,18 +236,25 @@ header {
   font-size: 0.9em;
 }
 
+.active-item{
+  background-color: #e2e2c4;;
+}
+
 .error-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  /* width: 100%; */
+  /* height: 100%; */
   background-color: white;
-  z-index: 1;
+  /* z-index: 1; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 16px;
+  padding: 16px;
+  gap: 16px;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: teal;
 }
 .error-container h2 {
   color: tomato;

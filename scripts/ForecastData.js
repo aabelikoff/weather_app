@@ -1,10 +1,13 @@
-class DataManipulator {
+// Class DataManipulator breakes weather forecast array to map and creates analytics for each forecast day
+// Analytics helps creating 5 days forecastBlock
+class ForecastData {
   constructor(weatherArray) {
     this.weatherMap = this.splitWeatherArrayByDates(weatherArray);
   }
-
+  //Creates a Map with a keys - day timestamp in Unix time and values = slices of weather array
   splitWeatherArrayByDates(weatherArray) {
-    let date = new Date().setHours(0, 0, 0, 0);
+    let [{ dt: startDate }] = weatherArray;
+    let date = new Date(startDate * 1000).setHours(0, 0, 0, 0);
     const msRange = 24 * 60 * 60 * 1000;
     let pointer = 0;
     let entries = [];
@@ -20,7 +23,7 @@ class DataManipulator {
     }
     return new Map(entries);
   }
-
+  //sets word description to the average day temperature
   getTempDescription(min, max) {
     let avg = (min + max) / 2;
     let resStr = "Very cold";
@@ -33,7 +36,7 @@ class DataManipulator {
     }
     return resStr;
   }
-
+  //get min, max and average temperature description for a day
   getDayTempRange(array) {
     let { minTemp, maxTemp } = array.reduce(
       (acc, { main: { temp } }) => {
@@ -50,7 +53,7 @@ class DataManipulator {
       tempDescr,
     };
   }
-
+  //gets prevail weather description and icon for a day
   getDayWeatherDescription(array) {
     let arrayToAnalyse = array.map(({ weather: [{ main, icon }] }) => {
       return [main, icon];
@@ -58,7 +61,7 @@ class DataManipulator {
 
     let mainFrequencyObj = {};
     let iconFrequencyObj = {};
-
+    //counts each entry number in the object (key - entry, value - number)
     for (let [main, icon] of arrayToAnalyse) {
       mainFrequencyObj[main] = (mainFrequencyObj[main] || 0) + 1;
       iconFrequencyObj[icon] = (iconFrequencyObj[icon] || 0) + 1;
@@ -86,11 +89,11 @@ class DataManipulator {
       icon,
     };
   }
-
+  //joins two types of weather description (min temp, max temp, temp descr, weather descr, icon)
   getDayWeatherObj(array) {
     return Object.assign({}, this.getDayTempRange(array), this.getDayWeatherDescription(array));
   }
-
+  //returns array of analytic weather information for 5 days. Each element equals a day.
   getAllDaysWeatherArray() {
     let array = [];
     this.weatherMap.forEach((value, key) => {

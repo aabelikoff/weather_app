@@ -1,6 +1,9 @@
+const HOME_CITY = "Dublin";
+//object to form proper url for requests
 const apiInfo = {
   apiKey: "05d2088a279e772e80c3bbb83d947886",
   getCurrentUrl(searchObj) {
+    //for current weather obj
     if (searchObj.city) {
       return `https://api.openweathermap.org/data/2.5/weather?q=${searchObj.city}&units=metric&appid=${this.apiKey}`;
     } else {
@@ -8,9 +11,11 @@ const apiInfo = {
     }
   },
   getForecastUrl(lat, lon) {
+    //for forecast array
     return `https://api.openweathermap.org/data/2.5/forecast/?lat=${lat}&lon=${lon}&units=metric&appid=${this.apiKey}`;
   },
   getGeocodingUrl(searchObj) {
+    //for closest places
     if (searchObj.lat && searchObj.lon) {
       return `http://api.openweathermap.org/data/2.5/find?lat=${searchObj.lat}&lon=${searchObj.lon}&cnt=5&units=metric&appid=${this.apiKey}`;
     } else {
@@ -18,13 +23,12 @@ const apiInfo = {
     }
   },
 };
-//weather api request for weather info obj
+//weather api request for weather info obj - current weather obj
 async function getCommonInfo(searchParams) {
   let url = apiInfo.getCurrentUrl(searchParams);
-  //testing
   let response = await fetch(url);
   if (!response.ok) {
-    throw new HttpError("Http request error", response);
+    throw new HttpError("Http request error", response, "current");
   }
   let result = await response.json();
   let {
@@ -53,20 +57,22 @@ async function getCommonInfo(searchParams) {
     icon: `https://openweathermap.org/img/wn/${icon}@2x.png`,
   };
 }
-
+//weather api request for weather forecast array
 async function getForecastInfo({ lat, lon }) {
   response = await fetch(apiInfo.getForecastUrl(lat, lon));
   if (!response.ok) {
-    throw new HttpError("Http request error", response);
+    throw new HttpError("Http request error", response, "forecast");
   }
   let { list: forecast } = await response.json();
-  console.log(forecast);
   return forecast;
 }
-
+//get current latitude and longitude from Geolocation API
 async function getGeolocation() {
   try {
     const position = await new Promise((resolve, reject) => {
+      if (!navigator.geolocation) {
+        reject(new error("Browser doesn't support geolocation"));
+      }
       navigator.geolocation.getCurrentPosition(
         (position) => resolve(position),
         (error) => reject(error)
@@ -77,50 +83,47 @@ async function getGeolocation() {
       lon: position.coords.longitude,
     };
   } catch (error) {
+    //if uset blocks geolocation info, try to get coordinates from ipapi
     console.log("Error while getting geolocation from browser", error.message);
     let res = await getCoordsFromIp();
     return res;
   }
 }
-
-getGeolocation()
-  .then((res) => console.log(res))
-  .catch((error) => console.log(error));
-
+//get coordinates from ip address using ipapi
 async function getCoordsFromIp() {
   try {
     let response = await fetch("https://ipapi.co/json");
-    console.log(response.ok);
     if (!response.ok) {
       throw new HttpError("Couldn't get ip info", response);
     }
     let data = await response.json();
-    let { city, latitude, longitude } = data;
+    let { latitude: lat, longitude: lon } = data;
     return {
-      // city: city,
-      lat: latitude,
-      lon: longitude,
+      lat,
+      lon,
     };
   } catch (error) {
+    //if ipapi request was bad retun HOME_CITY
     if (error instanceof HttpError) {
       console.log(error.message);
       return {
         city: HOME_CITY,
       };
     } else {
-      throw error;
+      throw error; //just show error
     }
   }
 }
-
+//request for closest places
 async function getClosestPlaces(searchParams) {
   const url = apiInfo.getGeocodingUrl(searchParams);
   let response = await fetch(url);
   if (!response.ok) {
-    throw new HttpError("Http request error", response);
+    throw new HttpError("Http request error", response, "closest");
   }
   let result = await response.json();
   if (result.list.length <= 1) {
+    //if we get exact result(by city name) try to get data one more
     let {
       list: [
         {
@@ -129,7 +132,7 @@ async function getClosestPlaces(searchParams) {
       ],
     } = result;
     if (lat && lon) {
-      getClosestPlaces({ lon: lon, lat: lat });
+      getClosestPlaces({ lon, lat });
     }
   }
   return result.list.slice(1);
