@@ -17,9 +17,9 @@ function showCurrentWeather(weatherObj, containerElem) {
         <p>Real feel <span data-info-type="feels_like"></span>&deg;</p>
     </div>
       <div class="add-info flex column between">
-        <p id="min-temp">Sunrise: <span data-info-type="sunrise"></span></p>
-        <p id="max-temp">Sunset: <span data-info-type="sunset"> </span></p>
-        <p id="cur-wind">Duration: <span data-info-type="duration"> </span></p>
+        <p id="min-temp"><span>Sunrise: </span><span data-info-type="sunrise"></span></p>
+        <p id="max-temp"><span>Sunset: </span><span data-info-type="sunset"> </span></p>
+        <p id="cur-wind"><span>Duration: </span><span data-info-type="duration"> </span></p>
       </div>
   </div>
   `;
@@ -141,11 +141,15 @@ function show5DaysForecast(weatherArray, containerElem) {
     dayItem.dataset.dt = weatherObj.dt;
     let headerText = index ? geShorttWeekDay(weatherObj.dt) : getDayPart(new Date());
     dayItem.innerHTML = `
-    <h2 class='day-item-title'>${headerText}</h2>
+    <div class='title-block'>
+      <h2 class='day-item-title'>${headerText}</h2>
+    </div>
     <p>${getShortDateStr(weatherObj.dt)}</p>
-    <img src='https://openweathermap.org/img/wn/${weatherObj.icon}@2x.png' alt='weather-icon'/>
-    <p>Max: ${weatherObj.maxTemp}&deg;</p>
-    <p>Min: ${weatherObj.minTemp}&deg;</p>
+    <div class='pic'>
+      <img src='https://openweathermap.org/img/wn/${weatherObj.icon}@2x.png' alt='weather-icon'/>
+    </div>
+    <p><span class='key'>Max: </span><span class='val max'>${weatherObj.maxTemp.toFixed(0)}&deg;</span></p>
+    <p><span class='key'>Min: </span><span class='val min'>${weatherObj.minTemp.toFixed(0)}&deg;</span></p>
     <p>${weatherObj.main}, ${weatherObj.tempDescr}</p>`;
     containerElem.append(dayItem);
     if (!index) setActiveDay(dayItem);

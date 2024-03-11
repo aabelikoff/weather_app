@@ -17,7 +17,6 @@ menuElem.addEventListener("click", function (e) {
   if (actionType) {
     setActiveMenuItem(actionType);
     weatherApp.showPart(actionType);
-    console.log(actionType);
   }
 });
 
@@ -70,16 +69,12 @@ async function renderWeatherApp(searchObj) {
     showForecast(weatherArray, fiveDaysForecastBlock, 0);
     showNearbyPlacesWeather(nearbyPlaces, nearbyBlock);
     function clearAllBlocks() {
-      console.log("clearing blocks");
-      console.log(nearbyBlock);
       currentWeatherBlock.innerHTML =
         forecastBlock.innerHTML =
         nearbyBlock.innerHTML =
         fiveDaysBlock.innerHTML =
         fiveDaysForecastBlock.innerHTML =
           "";
-      console.log(nearbyBlock);
-
       Object.values(blocks)
         .flat(1)
         .forEach((elem) => elem.classList.add("hide"));
