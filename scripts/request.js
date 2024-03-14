@@ -17,9 +17,9 @@ const apiInfo = {
   getGeocodingUrl(searchObj) {
     //for closest places
     if (searchObj.lat && searchObj.lon) {
-      return `http://api.openweathermap.org/data/2.5/find?lat=${searchObj.lat}&lon=${searchObj.lon}&cnt=5&units=metric&appid=${this.apiKey}`;
+      return `https://api.openweathermap.org/data/2.5/find?lat=${searchObj.lat}&lon=${searchObj.lon}&cnt=5&units=metric&appid=${this.apiKey}`;
     } else {
-      return `http://api.openweathermap.org/data/2.5/find?q=${searchObj.city}&cnt=5&units=metric&appid=${this.apiKey}`;
+      return `https://api.openweathermap.org/data/2.5/find?q=${searchObj.city}&cnt=5&units=metric&appid=${this.apiKey}`;
     }
   },
 };
