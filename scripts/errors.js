@@ -26,7 +26,6 @@ function showError(code, message, action) {
 }
 
 function errorHandler(error) {
-  console.log("error handler");
   if (error instanceof HttpError) {
     const city = document.querySelector("#city-search").value;
     let message = city ? `${city} could not be found.` : `Data has not been recieved.`;

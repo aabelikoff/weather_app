@@ -93,7 +93,6 @@ async function renderWeatherApp(searchObj) {
       clearAllBlocks,
     };
   } catch (error) {
-    console.log("We need error notification here", error.name, error.message);
     errorHandler(error);
   } finally {
     loader.hideSpinner();
