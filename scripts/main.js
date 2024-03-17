@@ -55,10 +55,10 @@ async function renderWeatherApp(searchObj) {
     forecast: [fiveDaysBlock.closest(".info-container"), fiveDaysForecastBlock.closest(".info-container")],
   };
 
-  if (!searchObj) {
-    searchObj = await getGeolocation();
-  }
   try {
+    if (!searchObj) {
+      searchObj = await getGeolocation();
+    }
     loader.showSpinner();
     let weatherObj = await getCommonInfo(searchObj);
     let weatherArray = await getForecastInfo(weatherObj);
@@ -101,7 +101,6 @@ async function renderWeatherApp(searchObj) {
 
 async function searchWeatherObjHandler(e) {
   hideError();
-  console.log(e.target.id);
   if (e.target.id == "search" || e.target.id == "city-search") {
     weatherApp?.clearAllBlocks();
     let searchObj = null;
@@ -110,7 +109,6 @@ async function searchWeatherObjHandler(e) {
     } else {
       searchObj = await getGeolocation();
     }
-    console.log(searchObj);
     weatherApp = await renderWeatherApp(searchObj);
     weatherApp?.showPart("current");
   }

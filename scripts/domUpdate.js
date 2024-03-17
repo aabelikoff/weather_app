@@ -13,7 +13,7 @@ function showCurrentWeather(weatherObj, containerElem) {
       </div>
     </div>
     <div>
-        <p id="current-temp"><span data-info-type="temp"></span>&deg;C</p>
+        <p id="current-temp"><span data-info-type="temp"></span>&nbsp;&deg;C</p>
         <p>Real feel <span data-info-type="feels_like"></span>&deg;</p>
     </div>
       <div class="add-info flex column between">
